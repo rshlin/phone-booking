@@ -1,0 +1,17 @@
+version: '3'
+
+services:
+  book-phone-db:
+    image: postgres:14-alpine
+    ports:
+      - "5432:5432"
+    volumes:
+      - book-phone-db-data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: secret
+      POSTGRES_DB: phone-book
+
+volumes:
+  book-phone-db-data:
+    driver: local

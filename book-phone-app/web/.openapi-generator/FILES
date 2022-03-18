@@ -1,0 +1,17 @@
+README.md
+src/main/kotlin/io/bookphone/web/api/ApiUtil.kt
+src/main/kotlin/io/bookphone/web/api/BookingApi.kt
+src/main/kotlin/io/bookphone/web/api/BookingApiController.kt
+src/main/kotlin/io/bookphone/web/api/BookingApiDelegate.kt
+src/main/kotlin/io/bookphone/web/api/PhoneApi.kt
+src/main/kotlin/io/bookphone/web/api/PhoneApiController.kt
+src/main/kotlin/io/bookphone/web/api/PhoneApiDelegate.kt
+src/main/kotlin/io/bookphone/web/api/model/ErrorResponseDto.kt
+src/main/kotlin/io/bookphone/web/api/model/PhoneAvailabilityDetailsDto.kt
+src/main/kotlin/io/bookphone/web/api/model/PhoneAvailabilityDto.kt
+src/main/kotlin/io/bookphone/web/api/model/PhoneBookRqDto.kt
+src/main/kotlin/io/bookphone/web/api/model/PhoneDetailsResponseDto.kt
+src/main/kotlin/io/bookphone/web/api/model/PhoneSpecDto.kt
+src/main/kotlin/io/bookphone/web/api/model/PhoneSpecNetworkDto.kt
+src/main/kotlin/io/bookphone/web/api/model/RentInfoResponseDto.kt
+src/main/kotlin/io/bookphone/web/api/model/ReturnPhoneRqDto.kt

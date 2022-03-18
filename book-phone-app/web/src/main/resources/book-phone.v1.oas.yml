@@ -1,0 +1,430 @@
+openapi: 3.0.0
+info:
+  title: book-phone
+  version: '1.0'
+  description: Simple app to list/book phones
+servers:
+  - url: 'http://localhost:8080/api/v1'
+    description: local
+paths:
+  /phone:
+    get:
+      summary: fetch phones
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PhoneDetailsResponse'
+                readOnly: true
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      operationId: get-phones
+      description: fetch phones
+      parameters:
+        - schema:
+            type: integer
+            minimum: 1
+            format: int32
+            example: 10
+          in: query
+          name: limit
+          description: size of paged result
+          required: false
+        - schema:
+            type: integer
+            minimum: 1
+            format: int32
+            example: 0
+          in: query
+          name: offset
+          description: number of elements to skip
+          required: false
+  '/phone/{phoneId}':
+    parameters:
+      - schema:
+          type: string
+        name: phoneId
+        in: path
+        required: true
+    get:
+      summary: Get phone details
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PhoneDetailsResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      operationId: get-phone-details
+      description: Get phone details
+  /booking:
+    get:
+      summary: Get booking details
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RentInfoResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      operationId: get-booking
+      parameters:
+        - schema:
+            type: integer
+            minimum: 1
+            format: int32
+            example: 10
+          in: query
+          name: limit
+          description: size of paged result
+          required: false
+        - schema:
+            type: integer
+            minimum: 1
+            format: int32
+            example: 0
+          in: query
+          name: offset
+          description: number of elements to skip
+          required: false
+    post:
+      summary: ''
+      operationId: post-booking
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RentInfoResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PhoneBookRq'
+        description: ''
+  '/booking/{bookingId}':
+    parameters:
+      - schema:
+          type: string
+          format: uuid
+        name: bookingId
+        in: path
+        required: true
+    get:
+      summary: Get rent(booking) details
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RentInfoResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      operationId: get-booking-details
+  '/booking/{bookingId}/return':
+    parameters:
+      - schema:
+          type: string
+        name: bookingId
+        in: path
+        required: true
+    post:
+      summary: ''
+      operationId: return-phone
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RentInfoResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReturnPhoneRq'
+components:
+  schemas:
+    PhoneDetailsResponse:
+      title: PhoneDetails
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: 4082FCBE-BE56-443E-96A2-437FAEF55BE0
+          readOnly: true
+        name:
+          type: string
+          example: Iphone 13
+          minLength: 4
+          maxLength: 50
+          readOnly: true
+        version:
+          type: string
+          format: date-time
+          example: '2022-03-16T00:22:43'
+          readOnly: true
+        spec:
+          $ref: '#/components/schemas/PhoneSpec'
+        availability:
+          $ref: '#/components/schemas/PhoneAvailability'
+      required:
+        - id
+        - name
+        - version
+        - availability
+    PhoneSpec:
+      title: PhoneSpec
+      type: object
+      nullable: true
+      properties:
+        network:
+          type: object
+          nullable: true
+          properties:
+            technology:
+              type: string
+              minLength: 5
+              maxLength: 150
+              example: GSM / CDMA / HSPA / EVDO / LTE / 5G
+              readOnly: true
+            net2g:
+              type: string
+              example: GSM / CDMA / HSPA / EVDO / LTE / 5G
+              minLength: 5
+              maxLength: 150
+              nullable: true
+              readOnly: true
+            net3g:
+              type: string
+              example: HSDPA 800 / 850 / 900 / 1700(AWS) / 1900 / 2100
+              minLength: 5
+              maxLength: 150
+              nullable: true
+              readOnly: true
+            net4g:
+              type: string
+              example: '1, 2, 3, 4, 5, 7, 8, 12, 13, 17, 18, 19, 20, 25, 26, 28, 32, 38, 39, 40, 41, 42, 48, 66 - International'
+              minLength: 5
+              maxLength: 150
+              nullable: true
+              readOnly: true
+          required:
+            - technology
+    PhoneAvailability:
+      type: object
+      properties:
+        available:
+          type: boolean
+          readOnly: true
+        details:
+          type: object
+          description: can be null if phone is available to book
+          nullable: true
+          properties:
+            bookId:
+              type: string
+              description: can be null if requester does not own the booking
+              format: uuid
+              example: A715B6D0-AA9C-4E44-8984-03EF9327D820
+              nullable: true
+              readOnly: true
+            bookedAt:
+              type: string
+              format: date-time
+              example: '2022-03-16T00:22:43'
+              readOnly: true
+            bookedBy:
+              type: string
+              format: email
+              example: abc@xyz.com
+              minLength: 6
+              readOnly: true
+          required:
+            - bookedAt
+            - bookedBy
+      required:
+        - available
+    PhoneBookRq:
+      title: PhoneBookRq
+      type: object
+      properties:
+        phoneId:
+          type: string
+          format: uuid
+          example: A715B6D0-AA9C-4E44-8984-03EF9327D820
+          writeOnly: true
+        phoneVersion:
+          type: string
+          format: date-time
+          example: '2022-03-16T00:22:43'
+          readOnly: true
+          description: used for optimistic locking
+      required:
+        - phoneId
+        - phoneVersion
+    RentInfoResponse:
+      title: RentInfo
+      type: object
+      properties:
+        id:
+          type: string
+        phoneId:
+          type: string
+        userEmail:
+          type: string
+        rentDate:
+          type: string
+          example: '2022-03-16T00:22:43'
+          format: date-time
+        returnDate:
+          type: string
+          format: date-time
+          example: '2022-03-16T00:22:43'
+          nullable: true
+      required:
+        - id
+        - phoneId
+        - userEmail
+        - rentDate
+    ErrorResponse:
+      title: ErrorResponse
+      type: object
+      properties:
+        message:
+          type: string
+          maxLength: 150
+          minLength: 10
+          readOnly: true
+      required:
+        - message
+    ReturnPhoneRq:
+      title: ReturnPhoneRq
+      type: object
+      properties:
+        rentId:
+          type: string
+          format: uuid
+          example: A715B6D0-AA9C-4E44-8984-03EF9327D820
+          nullable: false
+        rentVersion:
+          type: string
+          format: date-time
+          example: '2022-03-16T00:22:43'
+          readOnly: true
+          description: used for optimistic locking
+          nullable: false
+      required:
+        - rentId
+        - rentVersion
+      nullable: false
+  securitySchemes:
+    jwt:
+      type: http
+      scheme: bearer
+      description: ''

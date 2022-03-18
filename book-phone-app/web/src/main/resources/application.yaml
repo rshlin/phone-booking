@@ -1,0 +1,23 @@
+spring:
+  application:
+    name: bookPhone
+
+  jackson:
+    deserialization:
+      adjust-dates-to-context-time-zone: false
+    serialization:
+      WRITE_DATES_AS_TIMESTAMPS: false
+db:
+  url: jdbc:postgresql://localhost:5432/phone-book
+  user: postgres
+  password: secret
+redis:
+  url: redis://localhost:6379/0
+phone-spec:
+  host: gsmarena.com
+  port: 443
+  protocol: HTTPS
+server:
+  port: 8080
+
+#logging.level.Exposed: DEBUG
