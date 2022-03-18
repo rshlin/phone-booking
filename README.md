@@ -1,4 +1,4 @@
-# Book Phone app
+# Phone Booking app
 An implementation of test task that allows to book/return phones. 
 
 See the task specification here: [TASK.md](./TASK.md)
